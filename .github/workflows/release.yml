@@ -1,0 +1,54 @@
+name: Create Resource Pack Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+        default: 'v1.0.0'
+      changelog_en:
+        description: 'Changelog in English'
+        required: false
+        default: '- Add Japanese Translation'
+      changelog_jp:
+        description: 'Changelog in Japanese'
+        required: false
+        default: '- 日本語翻訳を追加'
+
+env:
+  PROJECT_NAME: 'JP_LOCALIZATION_IMPROVABLE_SKILLS_3'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create ZIP file
+        run: |
+          zip -r ${{ env.PROJECT_NAME }}-${{ github.event.inputs.version }}.zip . -x "*.git*" "*.github*"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.version }}
+          name: Release ${{ github.event.inputs.version }}
+          body: |
+            ${{ github.event.inputs.version }} is here!
+
+            ## Changelog
+            ${{ github.event.inputs.changelog_en }}
+
+            -----
+
+            ${{ github.event.inputs.version }} が登場！
+
+            ## 変更履歴
+            ${{ github.event.inputs.changelog_jp }}
+          files: ${{ env.PROJECT_NAME }}-${{ github.event.inputs.version }}.zip
