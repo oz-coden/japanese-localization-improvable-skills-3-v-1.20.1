@@ -17,7 +17,7 @@ on:
         default: '- 日本語翻訳を追加'
 
 env:
-  PROJECT_NAME: 'JP_LOCALIZATION_IMPROVABLE_SKILLS_3'
+  PROJECT_NAME: 'Mekanism_Lasers_JP'
 
 jobs:
   build-and-release:
@@ -34,21 +34,23 @@ jobs:
         run: |
           zip -r ${{ env.PROJECT_NAME }}-${{ github.event.inputs.version }}.zip . -x "*.git*" "*.github*"
 
+      - name: Generate Release Notes
+        run: |
+          echo "${{ github.event.inputs.version }} is here!" > release_body.txt
+          echo "" >> release_body.txt
+          echo "## Changelog" >> release_body.txt
+          echo "${{ github.event.inputs.changelog_en }}" | sed 's/\\n/\n/g' >> release_body.txt
+          echo "" >> release_body.txt
+          echo "-----" >> release_body.txt
+          echo "" >> release_body.txt
+          echo "${{ github.event.inputs.version }} が登場！" >> release_body.txt
+          echo "## 変更履歴" >> release_body.txt
+          echo "${{ github.event.inputs.changelog_jp }}" | sed 's/\\n/\n/g' >> release_body.txt
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.version }}
           name: Release ${{ github.event.inputs.version }}
-          body: |
-            ${{ github.event.inputs.version }} is here!
-
-            ## Changelog
-            ${{ github.event.inputs.changelog_en }}
-
-            -----
-
-            ${{ github.event.inputs.version }} が登場！
-
-            ## 変更履歴
-            ${{ github.event.inputs.changelog_jp }}
+          body_path: release_body.txt
           files: ${{ env.PROJECT_NAME }}-${{ github.event.inputs.version }}.zip
