@@ -1,4 +1,4 @@
-# Japanese Localization for Improvable Skills 3 v 1.20.1-20.1.13
+# Japanese Localization for Improvable Skills 3 v1.20.1
 
 Japanese section is [available](#目次) in below this section.
 
@@ -45,7 +45,7 @@ This project is released under the MIT License.
 
 ---
 
-# Japanese Localization for Improvable Skills 3 v 1.20.1-20.1.13
+# Japanese Localization for Improvable Skills 3 v1.20.1
 
 ## 目次
 
